@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 
 <head>
     <meta charset="UTF-8">
@@ -7,11 +7,126 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
         integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <title>Document</title>
+    <title>Liste de personnes</title>
 </head>
 
 <body>
+    <div class="container">
+        <header>
+            <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+                <a class="navbar-brand" href="#">Navbar</a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav">
+                        <li class="nav-item active">
+                            <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Features</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Pricing</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </header>
 
+        <form action="/add" method="post">
+            <div class="card m-6">
+                <div class="card-header">
+                    <h2 class="card-title text-center">formulaire d'inscription</h2>
+                </div>
+                <div class="card-body">
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="prenom">Prénom :</label>
+                                <input type="text" name="prenom" id="prenom" class="form-control">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="nom">Nom :</label>
+                                <input type="text" name="nom" id="nom" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="dob">Date de naissance :</label>
+                                <input type="date" name="dob" id="dob" class="form-control">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="genre">Genre :</label>
+                                <select name="genre" id="genre" class="form-control">
+                                    <option value="0">Homme</option>
+                                    <option value="1">femme</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="ville">Ville :</label>
+                                <input type="text" name="ville" id="ville" class="form-control">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="domaine">Domaine:</label>
+                                <input type="text" name="domaine" id="domaine" class="form-control">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="photo">Ajouter une photo :</label>
+                            <input type="file" name="photo" id="photo" class="form-control-file">
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer text-right">
+                    <input type="submit" value="valider" class="btn btn-primary">
+                </div>
+
+            </div>
+        </form>
+        <h1>Liste des personnes</h1>
+        <div class="card-deck">
+            <% if (personnes!=undefined) {%>
+            <% personnes.forEach(personne => {%>
+
+
+            <div class="card">
+                <div class="card-body">
+                    <img src="/public/uploads/<%= personne.photo%>" alt="">
+                    <h3 class="card-title"><%= personne.prenom%> <%= personne.nom%></h3>
+
+
+                    <p>Date de naissance: <%= personne.dob%></p>
+                    <p>Genre: <%= personne.genre%></p>
+                    <p>Ville: <%= personne.ville%></p>
+                    <p> Domaine: <%= personne.domaine%></p>
+                </div>
+                <div class="card-footer">
+                    <a class="btn btn-danger" href="/delete/<%=personne.id%>">supprimer</a>
+                    <a class="btn btn-warning text-light" href="/edit/<%=personne.id%>">Modifier</a>
+                </div>
+            </div>
+            <%}) %>
+            <% } %>
+        </div>
+    </div>
 </body>
 
 </html>

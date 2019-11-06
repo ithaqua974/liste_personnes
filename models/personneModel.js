@@ -1,6 +1,6 @@
 let mongoose = require('mongoose');
 let Schema = mongoose.Schema;
-let dbUrl = 'mongodb://localhost:27017/calcul';
+let dbUrl = 'mongodb://localhost:27017/personne';
 
 mongoose.connect(dbUrl, {
     useNewUrlParser: true,
@@ -9,14 +9,15 @@ mongoose.connect(dbUrl, {
 });
 let personneSchema = mongoose.Schema({
     nom: String,
-    prénom: String,
+    prenom: String,
     photo: String,
     domaine: String,
     dob: Date,
     ville: String,
-    genre: String,
+    genre: Boolean,
+    choisi: Boolean,
     dateChoisi: Date,
 });
 
-let Persone = mongoose.model('Personne', personneSchema);
+let Personne = mongoose.model('Personne', personneSchema);
 module.exports = Personne;
