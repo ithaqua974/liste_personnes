@@ -32,20 +32,24 @@ controller.save = (req, res) => {
         db.on('error', console.error.bind(console, 'connection error:'));
         db.once('open', () => {
 
-            let personneAjout = new Personne({
-                nom: req.body.nom,
-                prenom: req.body.prenom,
-                photo: req.body.photo,
-                dob: req.body.dob,
-                ville: req.body.ville,
-                genre: req.body.genre,
-                domaine: req.body.domaine,
-            });
+            let photo = req.files.photo;
+            photo.mv('${__dirname}/../public/uploads/' + photo.name), (err) => {
+                let personneAjout = new Personne({
+                    nom: req.body.nom,
+                    prenom: req.body.prenom,
+                    photo: req.body.photo,
+                    dob: req.body.dob,
+                    ville: req.body.ville,
+                    genre: req.body.genre,
+                    domaine: req.body.domaine,
+                });
 
-            personneAjout.save((err) => {
-                if (err) throw err;
-                res.redirect('/');
-            })
+                personneAjout.save((err) => {
+                    if (err) throw err;
+                    res.redirect('/');
+                })
+            }
+
 
         });
     } catch (err) {
@@ -97,10 +101,6 @@ controller.update = (req, res) => {
                     res.redirect('/');
                 }
             )
-
-
-
-
         }
         res.redirect('/');
     })
