@@ -22,6 +22,12 @@ controller.list = (req, res) => {
 
 
 };
+fileUpload = (photo) => {
+    photo.mv('${__dirname}/../public/uploads/' + photo.name), (err) => {
+        if (err)
+            return res.statut(500).send(err);
+    };
+}
 controller.save = (req, res) => {
     try {
         mongoose.connect(dbUrl, {
@@ -32,23 +38,23 @@ controller.save = (req, res) => {
         db.on('error', console.error.bind(console, 'connection error:'));
         db.once('open', () => {
 
-            let photo = req.files.photo;
-            photo.mv('${__dirname}/../public/uploads/' + photo.name), (err) => {
-                let personneAjout = new Personne({
-                    nom: req.body.nom,
-                    prenom: req.body.prenom,
-                    photo: req.body.photo,
-                    dob: req.body.dob,
-                    ville: req.body.ville,
-                    genre: req.body.genre,
-                    domaine: req.body.domaine,
-                });
 
-                personneAjout.save((err) => {
-                    if (err) throw err;
-                    res.redirect('/');
-                })
-            }
+            fileUpload(req.files.photo);
+            let personneAjout = new Personne({
+                nom: req.body.nom,
+                prenom: req.body.prenom,
+                photo: photo.name,
+                dob: req.body.dob,
+                ville: req.body.ville,
+                genre: req.body.genre,
+                domaine: req.body.domaine,
+            });
+
+            personneAjout.save((err) => {
+                if (err) throw err;
+                res.redirect('/');
+            });
+
 
 
         });
@@ -70,7 +76,7 @@ controller.delete = (req, res) => {
 controller.edit = (req, res) => {
 
     Personne.findById(req.params.id, function (err, personne) {
-        console.log(personne);
+
         if (err) throw err;
         if (personne) {
             Personne.find(function (err, personnes) {
@@ -87,6 +93,8 @@ controller.edit = (req, res) => {
 controller.update = (req, res) => {
     Personne.findById(req.body._id, function (err, personne) {
         if (err) throw err;
+        console.log(req.files.photo);
+        fileUpload(req.files.photo);
         // console.log(req.body);
         // console.log(personne);
         if (personne) {
@@ -94,9 +102,10 @@ controller.update = (req, res) => {
             mamodiff = req.body;
             mamodiff._id = mongoose.Types.ObjectId(mamodiff._id);
 
-            console.log(mamodiff);
+            // console.log(mamodiff);
             Personne.findByIdAndUpdate(mamodiff, mamodiff, false,
                 function (err) {
+
                     if (err) throw err;
                     res.redirect('/');
                 }
